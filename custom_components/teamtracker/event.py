@@ -158,6 +158,72 @@ async def async_process_event(
     return values
 
 
+async def async_process_competitor(
+    values,
+    sensor_name,
+    search_key,
+    event,
+    competition,
+    competition_index,
+    competitor,
+    competitor_index,
+    sport_path,
+    stop_flag,
+    prev_values,
+    lang,
+):
+    matched_index = await async_find_search_key(
+        values,
+        sensor_name,
+        search_key,
+        event,
+        competition,
+        competitor,
+        competitor_index,
+        sport_path,
+    )
+
+    if matched_index is not None:
+        found_competitor = True
+        prev_values = values.copy()
+
+        event_state = str(
+            await async_get_value(
+                event, "status", "type", "state", default="NOT_FOUND"
+            )
+        ).upper()
+        rc = await async_set_values(
+            values,
+            event,
+            competition_index,
+            matched_index,
+            lang,
+            sensor_name,
+        )
+        if not rc:
+            _LOGGER.debug(
+                "%s: event() Error occurred setting event values: %s",
+                sensor_name,
+                values,
+            )
+
+        if values["state"] == "IN":
+            stop_flag = True
+        time_diff = abs(
+            (arrow.get(values["date"]) - arrow.now()).total_seconds()
+        )
+        if values["state"] == "PRE" and time_diff < 1200:
+            stop_flag = True
+
+    prev_flag = await async_use_prev_values_flag(
+        prev_values, values, sensor_name, sport_path
+    )
+    if prev_flag:
+        values = prev_values
+
+    return values, found_competitor, stop_flag, prev_values
+
+
 async def async_find_search_key(
     values,
     sensor_name,
