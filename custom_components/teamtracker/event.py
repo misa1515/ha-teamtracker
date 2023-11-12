@@ -163,6 +163,7 @@ async def async_process_competitor(
     sensor_name,
     search_key,
     event,
+    event_state,
     competition,
     competition_index,
     competitor,
@@ -184,7 +185,6 @@ async def async_process_competitor(
         competitor,
         competitor_index,
         sport_path,
-        event_state,
     )
 
     if matched_index is not None:
