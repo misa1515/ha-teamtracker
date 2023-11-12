@@ -21,7 +21,7 @@ async def async_process_event(
 
     stop_flag = False
     search_key = team_id
-    sport = sport_path
+#    sport = sport_path
 
     found_competitor = False
 
@@ -48,7 +48,7 @@ async def async_process_event(
             competitor_index = -1
             for competitor_index, competitor in enumerate(await async_get_value(competition, "competitors", default=[])):
 
-                (values, found_competitor, stop_flag, prev_values, event_state,) = await process_competitor(
+                (values, found_competitor, stop_flag, prev_values, event_state,) = await async_process_competitor(
                     values,
                     sensor_name,
                     search_key,
