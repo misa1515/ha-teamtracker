@@ -172,6 +172,9 @@ async def async_process_competitor(
     prev_values,
     lang,
 ):
+    """Process the competitor"""
+
+
     matched_index = await async_find_search_key(
         values,
         sensor_name,
