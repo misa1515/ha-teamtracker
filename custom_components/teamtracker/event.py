@@ -184,6 +184,7 @@ async def async_process_competitor(
         competitor,
         competitor_index,
         sport_path,
+        event_state,
     )
 
     if matched_index is not None:
@@ -224,7 +225,7 @@ async def async_process_competitor(
     if prev_flag:
         values = prev_values
 
-    return values, found_competitor, stop_flag, prev_values
+    return values, found_competitor, stop_flag, prev_values, event_state
 
 
 async def async_find_search_key(
